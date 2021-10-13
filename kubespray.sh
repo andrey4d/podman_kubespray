@@ -19,7 +19,7 @@ exec_container() {
  }
 
 case "${1}" in
-  kubic)
+  cluster)
     CLUSTER="ansible-playbook -i /kubespray/inventory/inventory.ini --private-key /root/.ssh/id_rsa --become --become-user=root cluster.yml"
     exec_container "${CLUSTER}"
     ;;
@@ -40,6 +40,6 @@ case "${1}" in
     ;;
 
   *)
-    echo "Usage: $0 [kubic, reset, ping, remove]" >&2
+    echo "Usage: $0 [cluster, reset, ping, remove]" >&2
     ;;
 esac

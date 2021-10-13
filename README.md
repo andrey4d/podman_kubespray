@@ -2,4 +2,4 @@
 Create k8s cluster
 
 ##Usage
-./kubespray.sh [kubic, reset, ping, remove]
+./kubespray.sh [cluster, reset, ping, remove]
