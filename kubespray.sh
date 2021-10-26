@@ -7,6 +7,7 @@ INVENTORY_DIR="$(pwd)/inventory"
 SSH_KEY="${HOME}/.ssh"
 KUBESPRAY_VERSION="v2.17.0"
 KUBESPRAY_IMAGE="quay.io/kubespray/kubespray"
+INVENTORY="inventory.yml"
 
 exec_container() {
   local COMMAND="${1}"
@@ -20,22 +21,22 @@ exec_container() {
 
 case "${1}" in
   cluster)
-    CLUSTER="ansible-playbook -i /kubespray/inventory/inventory.ini --private-key /root/.ssh/id_rsa --become --become-user=root cluster.yml"
+    CLUSTER="ansible-playbook -i /kubespray/inventory/${INVENTORY} --private-key /root/.ssh/id_rsa --become --become-user=root cluster.yml"
     exec_container "${CLUSTER}"
     ;;
 
   reset)
-    RESET="ansible-playbook -i /kubespray/inventory/inventory.ini --private-key /root/.ssh/id_rsa --become --become-user=root reset.yml"
+    RESET="ansible-playbook -i /kubespray/inventory/${INVENTORY} --private-key /root/.ssh/id_rsa --become --become-user=root reset.yml"
     exec_container "${RESET}"
     ;;
 
   ping)
-    PING="ansible -i /kubespray/inventory/inventory.ini all -m ping"
+    PING="ansible -i /kubespray/inventory/${INVENTORY} all -m ping"
     exec_container "${PING}"
     ;;
 
   remove)
-    REMOVE_NODE="ansible-playbook -i /kubespray/inventory/inventory.ini --private-key /root/.ssh/id_rsa --become --become-user=root remove-node.yml"
+    REMOVE_NODE="ansible-playbook -i /kubespray/inventory/${INVENTORY} --private-key /root/.ssh/id_rsa --become --become-user=root remove-node.yml"
     exec_container "$REMOVE_NODE"
     ;;
 

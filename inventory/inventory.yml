@@ -1,0 +1,52 @@
+---
+# ## Configure 'ip' variable to bind kubernetes services on a
+# ## different ip than the default iface
+# ## We should set etcd_member_name for etcd cluster. The node that is not a etcd member do not need to set the value, or can set the empty string value.
+all:
+  hosts:
+    dvampere-master:
+      ansible_host: 10.0.0.208
+      ansible_user: ubuntu
+      ip: 10.3.0.1
+#      etcd_member_name: etcd1
+
+    dvampere-node1:
+      ansible_host: 10.0.0.141
+      ansible_user: ubuntu
+      ip: 10.3.0.2
+#      etcd_member_name: etcd2
+
+    dvampere-node2:
+      ansible_host: 10.0.0.175
+      ansible_user: opc
+      ip:  10.10.0.3
+      ansible_python_interpreter: /usr/bin/python3
+#      etcd_member_name:  etcd3
+
+# ## configure a bastion host if your nodes are not directly reachable
+#    bastion:
+#      bastion:
+#        ansible_host:  x.x.x.x
+#        ansible_user=: ome_user
+
+  children:
+    kube_control_plane:
+      hosts:
+        dvampere-master:
+
+    etcd:
+      hosts:
+        dvampere-master:
+
+    kube_node:
+      hosts:
+        dvampere-node1:
+        dvampere-node2:
+
+    calico_rr:
+
+    k8s_cluster:
+      children:
+        kube_control_plane:
+        kube_node:
+        calico_rr:
