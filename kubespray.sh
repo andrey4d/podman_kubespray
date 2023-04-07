@@ -4,8 +4,8 @@
 
 ENGINE="podman"
 INVENTORY_DIR="$(pwd)/inventory"
-SSH_KEY="${HOME}/.ssh"
-KUBESPRAY_VERSION="v2.17.0"
+SSH_KEY="${HOME}/.ssh.podman"
+KUBESPRAY_VERSION="v2.21.0"
 KUBESPRAY_IMAGE="quay.io/kubespray/kubespray"
 INVENTORY="inventory.yml"
 
@@ -13,7 +13,7 @@ exec_container() {
   local COMMAND="${1}"
   ${ENGINE} run --rm -it --name kubespray \
     -v "${INVENTORY_DIR}":/kubespray/inventory:z \
-    -v "${SSH_KEY}":/root/.ssh \
+    -v "${SSH_KEY}":/root/.ssh:z \
     "${KUBESPRAY_IMAGE}:${KUBESPRAY_VERSION}" \
     bash -c "${COMMAND}" \
     | tee kubespray.log
@@ -38,6 +38,9 @@ case "${1}" in
   remove)
     REMOVE_NODE="ansible-playbook -i /kubespray/inventory/${INVENTORY} --private-key /root/.ssh/id_rsa --become --become-user=root remove-node.yml"
     exec_container "$REMOVE_NODE"
+    ;;
+  bash)
+    exec_container "bash"    
     ;;
 
   *)

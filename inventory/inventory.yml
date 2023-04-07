@@ -4,21 +4,21 @@
 # ## We should set etcd_member_name for etcd cluster. The node that is not a etcd member do not need to set the value, or can set the empty string value.
 all:
   hosts:
-    dvampere-master:
-      ansible_host: 10.0.0.208
-      ansible_user: ubuntu
+    master:
+      ansible_host: 192.168.123.10
+      ansible_user: core
       ip: 10.3.0.1
 #      etcd_member_name: etcd1
 
-    dvampere-node1:
-      ansible_host: 10.0.0.141
-      ansible_user: ubuntu
+    node1:
+      ansible_host: 192.168.123.19
+      ansible_user: core
       ip: 10.3.0.2
 #      etcd_member_name: etcd2
 
-    dvampere-node2:
-      ansible_host: 10.0.0.175
-      ansible_user: opc
+    node2:
+      ansible_host: 192.168.123.225
+      ansible_user: core
       ip:  10.10.0.3
       ansible_python_interpreter: /usr/bin/python3
 #      etcd_member_name:  etcd3
@@ -32,16 +32,16 @@ all:
   children:
     kube_control_plane:
       hosts:
-        dvampere-master:
+        master:
 
     etcd:
       hosts:
-        dvampere-master:
+        master:
 
     kube_node:
       hosts:
-        dvampere-node1:
-        dvampere-node2:
+        node1:
+        node2:
 
     calico_rr:
 
